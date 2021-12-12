@@ -1,73 +1,51 @@
+# Import uuid library for generate Random ID:
+# Make uuid with number format <= uuid.uuid1()
+import uuid
 
-class data:
-    def __init__(self,id = "",dulieuinput = ""):
-        self.id = id 
-        self.dulieuinput = dulieuinput     
-    def load():
-        ff = open("savedata.txt",'r')
-        moc = int(ff.readline())
-        for i in range(moc):
-            listOfLIST[i].id = ff.readline()
-            listOfLIST[i].dulieuinput = ff.readline()
-    def create(n):
-        listOfLIST[n].id = str(n) 
-        listOfLIST[n].dulieuinput = input("hay nhap du lieu")
-    def update(n):
-        listOfLIST[n].dulieuinput = input("hay update du lieu")
-    def delete(n):
-         
-        listOfLIST[n].dulieuinput = ""
-    def showall():
-        for i in range(len(listOfLIST)):
-            if listOfLIST[i].dulieuinput != "":
-                print(listOfLIST[i].id,"/n")
-                print(listOfLIST[i].dulieuinput,"/n")
-    def save(moc):
-        ff = open("savedata.txt",'w')
-        ff.write(str(moc))
-        ff.write("\n")
-        for i in range(len(listOfLIST)):
-            ff.write(listOfLIST[i].id)
-            ff.write("\n")
-            ff.write(listOfLIST[i].dulieuinput)
-            ff.write("\n")
-    def saveload(moc):
-        ff = open("savedata.txt",'w')
-        ff.write(str(moc))
-        ff.write("\n")
-        for i in range(len(listOfLIST)):
-            ff.write(listOfLIST[i].id)
-            ff.write(listOfLIST[i].dulieuinput)
-listOfLIST = [data() for i in range(0,1000)]  
+# Import pickle:
+import pickle
+# 1.1 Load data with pickle:
+def storeData(inputData, inputFileName):
+    # 1. Load old data:
+    dbfile1 = open(inputFileName, 'rb')
+    dataLoad = pickle.load(dbfile1)
+    dbfile1.close()
+    # Append new data into old data:
+    dataLoad.append(inputData)
 
-turn = "on"
-moc = 0
-while turn != "off":
-    print("1, create")
-    print("2,update ")
-    print("3, delete ")
-    print("4, showall ")
-    print("5 load ")
-    print("6, save ")
-    print("7 off ")
-    turn = input()
-    if turn == "7":
-        turn = "off"
-    if turn == "1":
-        data.create(moc)
-        moc = moc +1
-    if turn == "2":
-        chonso = int(input("hay chon so can update "))
-        data.update(chonso) 
-    if turn == "3":
-        chonso = int(input("hay chon so can delete "))
-        data.delete(chonso)
-    if turn == "4":
-        data.showall
-    if turn == "6":
-        data.save(moc)
-    if turn == "5":
-        data.load()
-    if turn == "8":
-        data.saveload(moc)
+    dbfile2 = open(inputFileName, 'ab')
 
+    # source, destination
+    pickle.dump(dataLoad, dbfile2)
+    dbfile2.close()
+    return inputData
+
+def loadData(inputFileName):
+    # for reading also binary mode is important
+    dbfile = open(inputFileName, 'rb')
+    dataLoad = pickle.load(dbfile)
+    print('dataLoad:\n', dataLoad)
+    dbfile.close()
+    return dataLoad
+
+# storeData({
+#     "id_post": uuid.uuid1().hex,
+#     "title_post": "Bài viết 1"
+# },'./databases/posts.json')
+
+loadData('./databases/posts.json')
+
+# def storeData1(inputData, inputFileName):
+#     # 1. Load old data:
+#     dbfile1 = open(inputFileName, 'rb')
+#     dataLoad = pickle.load(dbfile1)
+#     dbfile1.close()
+#     # Append new data into old data:
+#     dataLoad.append(inputData)
+#
+#     dbfile2 = open(inputFileName, 'ab')
+#
+#     # source, destination
+#     pickle.dump(dataLoad, dbfile2)
+#     dbfile2.close()
+#     return dataLoad
